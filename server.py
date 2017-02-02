@@ -2,7 +2,7 @@
 
 from jinja2 import StrictUndefined
 
-from flask import Flask, render_template, redirect, request, flash, session, jsonify
+from flask import Flask, render_template, redirect, request, flash, session, jsonify, url_for
 from flask_debugtoolbar import DebugToolbarExtension
 
 from model import User, Rating, Movie, connect_to_db, db
@@ -51,11 +51,45 @@ def register_process():
                     zipcode=zipcode)
         db.session.add(user)
         db.session.commit()
-        print "You are now registered!"
         return "You are now registered! yay!"
+        # RETURN REDIRECT THING HERE
     else:
-        print "Username taken."
         return "Username taken."
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        email = request.form.get("email")
+        password = request.form.get("password")
+
+        user = User.query.filter_by(email=email).first()
+
+        print "check 1"
+
+        if user:
+            if password == user.password:
+                print "this is working!"
+                session['user'] = user.user_id
+                return 'You are now logged in'
+            else:
+                return 'That password is incorrect!'
+        else:
+            print "not registered"
+            return 'That email has not been registered.'
+
+        # if email == User.query.filter_by(email=email).first().email) and (session['password'] == User.query.filter_by(password=password).first().password):
+        #     print "check 2"
+        #     flash("You were successfully logged in")
+        #     print session
+        #     return redirect(url_for('index'))
+
+        # else:
+        #     print "check 3"
+        #     flash("Invalid credentials")
+        #     return redirect('/login')
+
+    return render_template('login.html')
 
 
 if __name__ == "__main__":

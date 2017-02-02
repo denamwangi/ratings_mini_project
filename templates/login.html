@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+  <h1>Login</h1>
+
+  <form action="" method=post id="credentials">
+      Email: <input type="text" name="email" id="email"><br>
+      Password: <input type="text" name="password" id="password"><br>
+      <input type="submit" value="Login">
+  </form>
+    <script src="https://code.jquery.com/jquery.js"></script>
+  <script>
+
+function validateCredentials(evt){
+  var formInputs= {
+    'email' : $("#email").val(),
+    'password' : $("#password").val(),
+  };
+
+  console.log(formInputs);
+
+  $.post('/login', formInputs, function(results){alert(results)});
+
+  evt.preventDefault();
+}
+
+
+$('#credentials').on('submit', validateCredentials);
+</script>
+{% endblock %} 
+
