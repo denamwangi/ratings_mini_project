@@ -6,8 +6,23 @@
 
 <body>
 
-  Ratings
-  
+  <input type="button" id="logout" value="Logout">
+
+<script src="https://code.jquery.com/jquery.js"></script>
+<script>
+
+$("#logout").on('click', logOut);
+
+function logOut(){
+
+$.get('/logout', returnLogOut);
+
+}
+
+function returnLogOut(results){
+    window.location.assign("/");
+}
+</script>  
   <ul>{% for message in get_flashed_messages() %}
         <li>{{ message }}</li>
         {% endfor %}

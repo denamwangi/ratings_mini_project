@@ -12,10 +12,16 @@
       <input type="submit" id="register-now">
 
     </form>
+    <script src="https://code.jquery.com/jquery.js"></script>
 
 <script>
 function successForm(result) {
-  alert(result);
+  if (result == "You are now registered!"){
+    window.location.assign("/login");
+  }
+  else {
+    window.location.assign("/register");
+  }
 }
 
 function validateForm(evt){

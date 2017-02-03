@@ -51,45 +51,43 @@ def register_process():
                     zipcode=zipcode)
         db.session.add(user)
         db.session.commit()
-        return "You are now registered! yay!"
-        # RETURN REDIRECT THING HERE
+        flash("You are now registered!")
+        return "You are now registered!"
     else:
+        flash("Username taken.")
         return "Username taken."
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    if session["user"]:
+        logged_in_user = User.query.get(session["user"])
+        flash("You are already logged in as %s." % logged_in_user.email)
     if request.method == 'POST':
         email = request.form.get("email")
         password = request.form.get("password")
 
         user = User.query.filter_by(email=email).first()
 
-        print "check 1"
-
         if user:
             if password == user.password:
-                print "this is working!"
                 session['user'] = user.user_id
+                flash("You were successfully logged in")
                 return 'You are now logged in'
             else:
+                flash("That password is incorrect!")
                 return 'That password is incorrect!'
         else:
-            print "not registered"
+            flash("That email has not been registered.")
             return 'That email has not been registered.'
 
-        # if email == User.query.filter_by(email=email).first().email) and (session['password'] == User.query.filter_by(password=password).first().password):
-        #     print "check 2"
-        #     flash("You were successfully logged in")
-        #     print session
-        #     return redirect(url_for('index'))
-
-        # else:
-        #     print "check 3"
-        #     flash("Invalid credentials")
-        #     return redirect('/login')
-
     return render_template('login.html')
+
+@app.route('/logout')
+def logout():
+    session["user"]=None
+    flash("You are now logged out.")
+    return "You are now logged out."
 
 
 if __name__ == "__main__":

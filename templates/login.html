@@ -10,15 +10,25 @@
     <script src="https://code.jquery.com/jquery.js"></script>
   <script>
 
+function returnFunction(results){
+  if (results == 'That password is incorrect!'){
+    window.location.assign("/login");
+  }
+  else if (results == 'You are now logged in'){
+    window.location.assign("/");
+  }
+  else {
+    window.location.assign("/register");
+  }
+}
+
 function validateCredentials(evt){
   var formInputs= {
     'email' : $("#email").val(),
     'password' : $("#password").val(),
   };
 
-  console.log(formInputs);
-
-  $.post('/login', formInputs, function(results){alert(results)});
+  $.post('/login', formInputs, returnFunction);
 
   evt.preventDefault();
 }
@@ -27,4 +37,3 @@ function validateCredentials(evt){
 $('#credentials').on('submit', validateCredentials);
 </script>
 {% endblock %} 
-
